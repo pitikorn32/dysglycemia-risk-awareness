@@ -9,7 +9,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "capture:figures": "CAPTURE_PUBLICATION_FIGURES=1 playwright test e2e/publication-figures.spec.ts --project=chromium --workers=1"
   },
   "dependencies": {
     "react": "19.2.8",
