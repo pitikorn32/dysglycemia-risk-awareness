@@ -169,3 +169,7 @@ artifacts/
 *.npz
 *.csv
 __pycache__/
+.venv/
+.pytest_cache/
+test-results/
+playwright-report/
