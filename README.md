@@ -84,3 +84,17 @@ To check the independent reference calculations from the frontend directory:
 python scripts/generate_scenario_goldens.py | diff - src/scenario/golden_cases.json
 python scripts/generate_planner_goldens.py | diff - src/scenario/planner_golden.json
 ```
+
+## Research presentation site
+
+The English-language [paper page source](website/) presents the BHI study design, results, synthetic Figure 2 walkthrough and downloadable BibTeX. It runs independently of the assessment service. To preview and check it with Node.js 24 and Python 3:
+
+```sh
+cd website
+npm ci
+npx playwright install chromium
+npm test
+npm run preview
+```
+
+Open [the local paper page](http://127.0.0.1:4173). The [Pages workflow](.github/workflows/paper-page.yml) checks relevant pull requests and changes to main. While the repository is private, it only runs the checks. When ready for public release, select **GitHub Actions** as the repository’s Pages source and run **Paper page** manually on main after making the repository public. It deploys only `website/dist`.
