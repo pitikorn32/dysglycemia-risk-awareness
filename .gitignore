@@ -155,3 +155,17 @@ vite.config.ts.timestamp-*
 .nx/cache
 .nx/workspace-data
 .nx/migrate-runs
+
+# Local scientific inputs and fitted artifacts
+datasets/
+models/
+artifacts/
+.local/
+*.pkl
+*.pickle
+*.joblib
+*.parquet
+*.onnx
+*.npz
+*.csv
+__pycache__/
