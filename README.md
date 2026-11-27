@@ -1,43 +1,86 @@
 # Dysglycemia risk awareness
 
-This repository accompanies the IEEE EMBS BHI paper *Design and Verification of an Interactive Dysglycemia Risk-Awareness Service with Bounded What-If Simulation* by Pitikorn Khlaisamniang, Bhumpat Chaiwattanayon, Roongruedee Chaiteerakij and Patthrarawalai Sirinara.
+This is the public platform source for *Design and Verification of an Interactive Dysglycemia Risk-Awareness Service with Bounded What-If Simulation* (IEEE EMBS BHI). Author and citation details are in [CITATION.cff](CITATION.cff).
 
-It releases the browser scenario layer (Box 2 in the paper’s architecture). Move a slider to compare the fixed 1–5 year baseline with a scenario, or apply one of five ranked alternatives to see its trajectory and its rank across 16 multiplier endpoint combinations. The ranges express sensitivity to literature assumptions. They do not quantify personal treatment benefit.
+The React client and FastAPI service implement the five-step assessment, input validation, eligibility checks, five baseline horizons, grouped log-odds explanations, manual what-if simulation, constrained ranking and sensitivity across 16 literature endpoint combinations. The gateway serves the browser and API from one origin.
 
-## Run the synthetic example
+**The default demo uses synthetic results.** Use invented inputs. All eligible profiles receive the same five illustrative baseline probabilities and hand-authored contributions. Entered measurements determine eligibility, and the lifestyle and BMI inputs determine the available scenario controls. Fitted models, private cohorts, internal evaluation outputs and credentials are excluded.
 
-From the repository root, use Node.js 24 and npm.
+## Run with Docker Compose
+
+From the repository root:
 
 ```sh
+docker compose up --build
+```
+
+Open [the local platform](http://localhost:8080). Start the anonymous assessment, or choose the direct scenario example. The default deployment requires no model files or configuration. Stop it with `docker compose down`.
+
+## Run locally
+
+Use Python 3.12 and Node.js 24. From the repository root, start the API in one terminal:
+
+```sh
+python3.12 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r backend/requirements-dev.txt
+python -m uvicorn app.main:app --app-dir backend --port 8000
+```
+
+Start the browser client in a second terminal:
+
+```sh
+cd frontend
 npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. The example starts with hand-authored baseline probabilities of 4%, 7%, 10%, 14% and 18%. These values come from the synthetic planner test case. Applying alternative 1 changes the displayed five-year scenario to 11.8%. Reset restores 18%.
+Open the URL printed by Vite. The client proxies API requests to port 8000. The [interactive API documentation](http://localhost:8000/api/docs) lists the request fields and response types.
 
-The demo runs entirely in the browser. It loads no fitted models, accepts no patient records and requires no API keys. The assessment, baseline scoring service and model-attribution view from the full platform are outside this release. Reproducing cohort metrics and the scored trajectory in the paper’s interface figure requires separate inputs.
+## Walk through an example
 
-## Implementation
+1. Start at the home page. Acknowledge the scope and enter age 42.
+2. Enter 5 sugary drinks, 5 fruit or vegetable occasions and 2 exercise sessions per week.
+3. Answer **No** to earlier fasting blood sugar (FBS) above 100 mg/dL. In the current annual slot, enter FBS 95 mg/dL and BMI 27. Leave the other slots blank.
+4. Review and submit. The demo baseline runs from 4% at year one to 18% at year five. Select a year in the attribution view to inspect the example log-odds terms.
+5. Apply alternative 1. The five-year scenario displays 11.8% while the baseline stays at 18%. Reset to return to the baseline. These values illustrate the software's assumptions and do not estimate individual treatment benefit.
 
-| File | Role |
+To exercise the applicability gate, edit the assessment and change current FBS to 101 mg/dL. The result explains the eligibility decision and withholds probabilities. The standalone example at `/scenario-demo` also works with just the browser client.
+
+## Source and scoring modes
+
+| Source | Responsibility |
 | --- | --- |
-| [src/App.tsx](src/App.tsx) | Supplies the synthetic baseline and starting BMI and weekly behavior values. |
-| [src/scenario/scenarioEngine.ts](src/scenario/scenarioEngine.ts) | Applies the rounded literature multipliers to signed changes, floors the product at 0.30, and computes each scenario probability as `1 - (1 - baseline) ** multiplier`. |
-| [src/scenario/planner.ts](src/scenario/planner.ts) | Enumerates bounded candidates, removes duplicates and ranks by mean scenario-to-baseline ratio plus 0.03 times effort. Repeats ranking at all 16 endpoint combinations. |
-| [src/scenario/ScenarioExplorer.tsx](src/scenario/ScenarioExplorer.tsx) | Connects the manual controls and ranked alternatives to the trajectory chart and probability table. |
+| [backend/app](backend/app) | Request and response schemas, applicability and missing-value handling, longitudinal features, integrity-checked model loading, scoring and grouped attribution. |
+| [backend/app/demo.py](backend/app/demo.py) | Fixed synthetic probabilities and example contributions. |
+| [frontend/src/assessment](frontend/src/assessment) | Typed five-step form, five annual slots, review, submission and edit flow. |
+| [frontend/src/results](frontend/src/results) | Trajectory, horizon selection, applicability messages and attribution. |
+| [frontend/src/scenario](frontend/src/scenario) | Survival-scale updates, bounds, deterministic candidate ranking and sensitivity. |
+| [gateway](gateway) | Same-origin Nginx routing and API request limits. |
 
-The companion modeling repository documents the longitudinal feature pipeline, target construction and model-development methods. [Dual-Track Longitudinal Diabetes Risk](https://github.com/pitikorn32/dual-track-longitudinal-diabetes-risk)
+With `MODEL_MANIFEST` unset, the API uses the synthetic example. To run the original scoring path with a separately held compatible release, set `MODEL_MANIFEST` to its manifest path before starting the API. An explicitly configured release that fails to load returns HTTP 503. Check `GET /api/v1/health` for the active release ID. The API marks responses `no-store`; scenario edits stay in the browser.
+
+The companion repository describes the modeling pipeline, feature construction and development methods. Reproducing the paper's cohort metrics requires the study data and fitted release. [Dual-Track Longitudinal Diabetes Risk](https://github.com/pitikorn32/dual-track-longitudinal-diabetes-risk)
 
 ## Verification
 
+With the Python environment active, the frontend dependencies installed and `MODEL_MANIFEST` unset, run from the repository root:
+
 ```sh
+python -m pytest -q
+cd frontend
 npm test
 npm run build
+npx playwright install chromium
+npm run test:e2e
+npm run capture:figures
 ```
 
-The tests cover the paper’s worked BMI example, probability bounds, the no-change case, candidate clipping, deterministic ordering and rank sensitivity. The production build writes static files to `dist/`. To independently regenerate and compare the synthetic reference values, run these commands with Python 3.10 or later.
+Playwright starts its own demo API and frontend on ports 18401 and 4173. Its live test submits a synthetic assessment, inspects attribution, applies a scenario and edits the inputs. The optional capture command saves synthetic screenshots under `frontend/test-results/publication-figures/`. They illustrate the public fixture and use different values from the scored example in the paper.
+
+To check the independent reference calculations from the frontend directory:
 
 ```sh
-python3 scripts/generate_scenario_goldens.py | diff - src/scenario/golden_cases.json
-python3 scripts/generate_planner_goldens.py | diff - src/scenario/planner_golden.json
+python scripts/generate_scenario_goldens.py | diff - src/scenario/golden_cases.json
+python scripts/generate_planner_goldens.py | diff - src/scenario/planner_golden.json
 ```
