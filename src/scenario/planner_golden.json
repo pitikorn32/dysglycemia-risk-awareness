@@ -1,0 +1,158 @@
+{
+  "baseline": [
+    0.04,
+    0.07,
+    0.1,
+    0.14,
+    0.18
+  ],
+  "cases": [
+    {
+      "name": "standard",
+      "profile": {
+        "bmi": 27,
+        "exercise": 2,
+        "fruitVegetable": 5,
+        "sugaryDrinks": 5
+      },
+      "expected": {
+        "candidate_count": 400,
+        "top": [
+          {
+            "candidate": {
+              "bmi": 25,
+              "exercise": 7,
+              "fruitVegetable": 5,
+              "sugaryDrinks": 0
+            },
+            "effort": 5.75,
+            "score": 0.8165157600933277,
+            "point": [
+              0.025424789180716112,
+              0.04475081961512628,
+              0.06430839332045823,
+              0.09076384436763896,
+              0.11767761731094428
+            ]
+          },
+          {
+            "candidate": {
+              "bmi": 25,
+              "exercise": 7,
+              "fruitVegetable": 8,
+              "sugaryDrinks": 0
+            },
+            "effort": 6.5,
+            "score": 0.8227455911137571,
+            "point": [
+              0.024767773220991662,
+              0.043605680855206774,
+              0.0626794410132353,
+              0.08849708856109806,
+              0.1147821940492948
+            ]
+          },
+          {
+            "candidate": {
+              "bmi": 25,
+              "exercise": 7,
+              "fruitVegetable": 5,
+              "sugaryDrinks": 2
+            },
+            "effort": 5.25,
+            "score": 0.8235453893912167,
+            "point": [
+              0.026315634308736846,
+              0.04630254962827074,
+              0.06651431141274666,
+              0.0938307588497258,
+              0.12159148938320585
+            ]
+          },
+          {
+            "candidate": {
+              "bmi": 25,
+              "exercise": 5,
+              "fruitVegetable": 5,
+              "sugaryDrinks": 0
+            },
+            "effort": 4.75,
+            "score": 0.8265307984096527,
+            "point": [
+              0.027044008734526503,
+              0.047570457805721444,
+              0.06831554888252345,
+              0.09633272306591234,
+              0.12478129868960508
+            ]
+          },
+          {
+            "candidate": {
+              "bmi": 25,
+              "exercise": 7,
+              "fruitVegetable": 8,
+              "sugaryDrinks": 2
+            },
+            "effort": 6.0,
+            "score": 0.8292395677105344,
+            "point": [
+              0.025635901630579272,
+              0.045118648323774324,
+              0.06483144008076047,
+              0.09149132504844293,
+              0.118606376418802
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "clipped",
+      "profile": {
+        "bmi": 19,
+        "exercise": 14,
+        "fruitVegetable": 21,
+        "sugaryDrinks": 0
+      },
+      "expected": {
+        "candidate_count": 2,
+        "top": [
+          {
+            "candidate": {
+              "bmi": 18.5,
+              "exercise": 14,
+              "fruitVegetable": 21,
+              "sugaryDrinks": 0
+            },
+            "effort": 0.5,
+            "score": 0.964978321256031,
+            "point": [
+              0.037928479640559454,
+              0.06642947415282596,
+              0.0949790647462605,
+              0.13312374791453485,
+              0.17136226192154413
+            ]
+          },
+          {
+            "candidate": {
+              "bmi": 19,
+              "exercise": 14,
+              "fruitVegetable": 21,
+              "sugaryDrinks": 0
+            },
+            "effort": 0.0,
+            "score": 1.0,
+            "point": [
+              0.04,
+              0.07,
+              0.1,
+              0.14,
+              0.18
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
