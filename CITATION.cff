@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: Please cite the accompanying IEEE EMBS BHI paper when using this software.
+title: Dysglycemia risk awareness
+type: software
+authors:
+  - family-names: Khlaisamniang
+    given-names: Pitikorn
+repository-code: https://github.com/pitikorn32/dysglycemia-risk-awareness
+preferred-citation:
+  type: conference-paper
+  title: Design and Verification of an Interactive Dysglycemia Risk-Awareness Service with Bounded What-If Simulation
+  collection-title: IEEE EMBS BHI
+  authors:
+    - family-names: Khlaisamniang
+      given-names: Pitikorn
+    - family-names: Chaiwattanayon
+      given-names: Bhumpat
+    - family-names: Chaiteerakij
+      given-names: Roongruedee
+    - family-names: Sirinara
+      given-names: Patthrarawalai
