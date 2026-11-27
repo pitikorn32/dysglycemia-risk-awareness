@@ -1,0 +1,10 @@
+**
+!gateway/
+!gateway/nginx.conf
+!frontend/
+!frontend/index.html
+!frontend/package*.json
+!frontend/tsconfig.json
+!frontend/vite.config.ts
+!frontend/src/
+!frontend/src/**

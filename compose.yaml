@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: ./backend
+    expose:
+      - "8000"
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${PLATFORM_PORT:-8080}:8080"
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:size=16m,noexec,nosuid,nodev
+      - /var/run:size=1m,noexec,nosuid,nodev
+      - /tmp:size=4m,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
