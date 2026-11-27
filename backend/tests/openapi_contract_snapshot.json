@@ -1,0 +1,139 @@
+{
+  "api_version": "1.0.0",
+  "request": {
+    "$ref": "#/components/schemas/BaselineRequest"
+  },
+  "success": [
+    {
+      "$ref": "#/components/schemas/ScoredResponse"
+    },
+    {
+      "$ref": "#/components/schemas/OutsideApplicabilityResponse"
+    }
+  ],
+  "schemas": {
+    "AnnualMeasurement": {
+      "properties": [
+        "bmi",
+        "diastolic_bp",
+        "fbs",
+        "pulse",
+        "systolic_bp",
+        "waist"
+      ],
+      "required": []
+    },
+    "ApplicabilityReason": {
+      "properties": [
+        "code",
+        "message"
+      ],
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "BaselineRequest": {
+      "properties": [
+        "age",
+        "alcohol_status",
+        "annual_history",
+        "cooking_method",
+        "earlier_fbs_over_100",
+        "earlier_highest_fbs",
+        "exercise_days_per_week",
+        "family_history",
+        "fruit_vegetable_days_per_week",
+        "physical_activity_days_per_week",
+        "sex",
+        "sleep_hours",
+        "smoking_status",
+        "sugary_drinks_per_week"
+      ],
+      "required": [
+        "age",
+        "earlier_fbs_over_100",
+        "annual_history"
+      ]
+    },
+    "FeatureContribution": {
+      "properties": [
+        "feature_group",
+        "label",
+        "log_odds_contribution"
+      ],
+      "required": [
+        "feature_group",
+        "label",
+        "log_odds_contribution"
+      ]
+    },
+    "HorizonExplanation": {
+      "properties": [
+        "contributions",
+        "horizon_years",
+        "reference_probability"
+      ],
+      "required": [
+        "horizon_years",
+        "reference_probability",
+        "contributions"
+      ]
+    },
+    "HorizonProbability": {
+      "properties": [
+        "horizon_years",
+        "probability"
+      ],
+      "required": [
+        "horizon_years",
+        "probability"
+      ]
+    },
+    "ModelReleaseSummary": {
+      "properties": [
+        "history_years",
+        "model_family",
+        "release_id"
+      ],
+      "required": [
+        "release_id",
+        "model_family",
+        "history_years"
+      ]
+    },
+    "Notice": {
+      "properties": [
+        "code",
+        "message"
+      ],
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "OutsideApplicabilityResponse": {
+      "properties": [
+        "reasons",
+        "status"
+      ],
+      "required": [
+        "reasons"
+      ]
+    },
+    "ScoredResponse": {
+      "properties": [
+        "baseline",
+        "data_quality",
+        "explanations",
+        "model_release",
+        "status"
+      ],
+      "required": [
+        "baseline",
+        "explanations",
+        "model_release"
+      ]
+    }
+  }
+}
